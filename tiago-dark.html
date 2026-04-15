@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Estratégico — Tiago Silva | ConectaHub</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#e8e8e8;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1a1a 0%,#222 100%);border-bottom:2px solid #F5A623;padding:32px 40px;display:flex;align-items:center;gap:24px}
+.logo{height:48px}
+.header-info{flex:1}
+.header-info h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.header-info p{color:#999;font-size:14px}
+.badge-geral{background:#F5A623;color:#000;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700}
+.main{max-width:900px;margin:0 auto;padding:32px 20px}
+.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.score-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:20px;text-align:center}
+.score-card.highlight{border-color:#F5A623;background:linear-gradient(135deg,#1a1a1a,#1f1a0f)}
+.score-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:8px}
+.score-value{font-size:38px;font-weight:800;color:#F5A623;line-height:1}
+.score-sub{font-size:12px;color:#666;margin-top:4px}
+.chart-wrap{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:24px;margin-bottom:32px;display:flex;justify-content:center}
+.block{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:24px;margin-bottom:24px}
+.block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.block-title{font-size:17px;font-weight:700;color:#F5A623}
+.block-sub{font-size:12px;color:#777;margin-top:2px}
+.block-avg{background:#F5A623;color:#000;padding:4px 12px;border-radius:12px;font-size:13px;font-weight:700}
+.question-row{margin-bottom:14px}
+.q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.q-text{font-size:13px;color:#ccc}
+.q-score{font-size:14px;font-weight:700;color:#F5A623}
+.bar-bg{background:#2a2a2a;border-radius:4px;height:6px;overflow:hidden}
+.bar-fill{height:6px;border-radius:4px;background:linear-gradient(90deg,#c47d0a,#F5A623)}
+.footer{text-align:center;padding:32px;color:#555;font-size:12px;border-top:1px solid #1a1a1a;margin-top:16px}
+.footer span{color:#F5A623}
+@media(max-width:600px){.scores-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="header">
+<img class="logo" src="https://conectahub.com.au/wp-content/uploads/2025/05/Conecta-Hub-Logo.svg" alt="ConectaHub">
+<div class="header-info">
+<h1>Tiago Silva &mdash; Super Render</h1>
+<p>Diagn&oacute;stico Estrat&eacute;gico Pessoal &bull; Abril 2026</p>
+</div>
+<span class="badge-geral">Em Evolu&ccedil;&atilde;o</span>
+</div>
+<div class="main">
+<div class="scores-grid">
+<div class="score-card highlight"><div class="score-label">L&iacute;der</div><div class="score-value">8.6</div><div class="score-sub">/ 10</div></div>
+<div class="score-card"><div class="score-label">Time</div><div class="score-value">7.0</div><div class="score-sub">/ 10</div></div>
+<div class="score-card"><div class="score-label">Estrutura</div><div class="score-value">7.3</div><div class="score-sub">/ 10</div></div>
+<div class="score-card highlight"><div class="score-label">Geral</div><div class="score-value">7.6</div><div class="score-sub">76 pontos</div></div>
+</div>
+<div class="chart-wrap"><canvas id="radar" width="340" height="340"></canvas></div>
+<div class="block">
+<div class="block-header"><div><div class="block-title">Personal Scorecard &mdash; L&iacute;der</div><div class="block-sub">Vis&atilde;o, decis&atilde;o e presen&ccedil;a de lideran&ccedil;a</div></div><div class="block-avg">M&eacute;dia: 8.6</div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">1. Clareza sobre o prop&oacute;sito da empresa?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">2. Vis&atilde;o clara dos pr&oacute;ximos 12 meses?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">3. Energia e motiva&ccedil;&atilde;o como l&iacute;der?</span><span class="q-score">9</span></div><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">4. Tomada de decis&atilde;o com velocidade?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">5. Disciplina e consist&ecirc;ncia nos h&aacute;bitos?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">6. Equil&iacute;brio vida pessoal e profissional?</span><span class="q-score">9</span></div><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">7. N&iacute;vel de autoconhecimento?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">8. Clareza dos seus pontos fortes?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">9. Capacidade de inspirar o time?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">10. Presen&ccedil;a no mercado e autoridade?</span><span class="q-score">1</span></div><div class="bar-bg"><div class="bar-fill" style="width:10%"></div></div></div>
+</div>
+<div class="block">
+<div class="block-header"><div><div class="block-title">Business Performance &mdash; Time</div><div class="block-sub">Entrega, comprometimento e alinhamento</div></div><div class="block-avg">M&eacute;dia: 7.0</div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">1. Performance geral do seu time hoje?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">2. Performance dos principais parceiros externos?</span><span class="q-score">3</span></div><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">3. Confian&ccedil;a na experi&ecirc;ncia que seus clientes recebem?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">4. Empresa preparada para operar sem voc&ecirc; 30-90 dias?</span><span class="q-score">9</span></div><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">5. Desenvolvimento de novos l&iacute;deres na empresa?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">6. Plano de carreira estruturado?</span><span class="q-score">9</span></div><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">7. Onboarding padronizado?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">8. Treinamento do time &eacute; cont&iacute;nuo?</span><span class="q-score">4</span></div><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">9. Cultura da empresa clara e vivida pelo time?</span><span class="q-score">4</span></div><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">10. Time preparado para crescimento?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+</div>
+<div class="block">
+<div class="block-header"><div><div class="block-title">Business Performance &mdash; Estrutura</div><div class="block-sub">Sistemas, processos e maturidade operacional</div></div><div class="block-avg">M&eacute;dia: 7.3</div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">1. Processos documentados e seguidos?</span><span class="q-score">8</span></div><div class="bar-bg"><div class="bar-fill" style="width:80%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">2. Metas e KPIs claros para todos?</span><span class="q-score">5</span></div><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">3. Financeiro organizado e previs&iacute;vel?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">4. Tecnologia e ferramentas adequadas?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">5. Marketing gerando resultados consistentes?</span><span class="q-score">10</span></div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">6. Vendas com processo estruturado?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">7. Atendimento ao cliente padronizado?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">8. Reuni&otilde;es estruturadas e produtivas?</span><span class="q-score">7</span></div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">9. Planejamento estrat&eacute;gico ativo?</span><span class="q-score">5</span></div><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></div>
+<div class="question-row"><div class="q-header"><span class="q-text">10. Capacidade de escalar o neg&oacute;cio?</span><span class="q-score">4</span></div><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></div>
+</div>
+</div>
+<div class="footer">Diagn&oacute;stico gerado por <span>ConectaHub</span> &bull; Confidencial &bull; Abril 2026</div>
+<script>
+new Chart(document.getElementById('radar').getContext('2d'),{type:'radar',data:{labels:['L&iacute;der','Time','Estrutura'],datasets:[{label:'Tiago Silva',data:[8.6,7.0,7.3],backgroundColor:'rgba(245,166,35,0.15)',borderColor:'#F5A623',borderWidth:2.5,pointBackgroundColor:'#F5A623',pointRadius:5}]},options:{responsive:false,scales:{r:{min:0,max:10,ticks:{stepSize:2,color:'#666',backdropColor:'transparent'},grid:{color:'#2a2a2a'},angleLines:{color:'#2a2a2a'},pointLabels:{color:'#ccc',font:{size:14,weight:'600'}}}},plugins:{legend:{display:false}}}});
+</script>
+</body>
+</html>
