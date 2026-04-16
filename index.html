@@ -396,6 +396,22 @@ function submitForm() {
 
 // ── EMAIL ────────────────────────────────────────────────────
 function sendEmail(nome, empresa, email, avgLider, avgTime, avgEstrutura, avgGeral, pontos, classif) {
+  // Send to Google Sheets
+  fetch('https://script.google.com/macros/s/AKfycbx_2QBhN2b__HgzepzBe3WEbIhEZLWH_zNQ6sFsGVhxHu1xWgSTZwf-a6SHCrxMH4H_/exec', {
+    method: 'POST',
+    body: JSON.stringify({
+      nome, empresa, email,
+      avg_lider: avgLider,
+      avg_time: avgTime,
+      avg_estrutura: avgEstrutura,
+      avg_geral: avgGeral,
+      classificacao: classif,
+      lider: answers.lider,
+      time: answers.time,
+      estrutura: answers.estrutura
+    })
+  }).catch(e => console.log('Sheets error:', e));
+
   // EmailJS - needs config in settings
   const SERVICE_ID = 'conectahub_service';
   const TEMPLATE_ID = 'template_y1vbrhc';
