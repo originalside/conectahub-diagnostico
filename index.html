@@ -399,7 +399,6 @@ function sendEmail(nome, empresa, email, avgLider, avgTime, avgEstrutura, avgGer
   // EmailJS - needs config in settings
   const SERVICE_ID = 'conectahub_service';
   const TEMPLATE_ID = 'template_y1vbrhc';
-  const PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY'; // to be configured
 
   const detalhes = Object.keys(BLOCKS).map(bk => {
     return BLOCKS[bk].label + '\n' +
@@ -407,7 +406,7 @@ function sendEmail(nome, empresa, email, avgLider, avgTime, avgEstrutura, avgGer
   }).join('\n\n');
 
   emailjs.init('8y0LbqRpZD4V5zQMq');
-  emailjs.send('conectahub_service', 'diagnostico_template', {
+  emailjs.send('conectahub_service', 'template_y1vbrhc', {
     to_name: nome,
     to_email: email,
     empresa: empresa,
@@ -418,7 +417,8 @@ function sendEmail(nome, empresa, email, avgLider, avgTime, avgEstrutura, avgGer
     pontos: pontos,
     classificacao: classif,
     detalhes: detalhes,
-    data: new Date().toLocaleDateString('pt-BR')
+    data: new Date().toLocaleDateString('pt-BR'),
+    bcc_email: 'conectahubaustralia@gmail.com'
   }).then(() => {
     const el = document.getElementById('email-status');
     if (el) el.innerHTML = '<div class="email-sent">&#10003; Diagnóstico enviado para <strong>' + email + '</strong></div>';
