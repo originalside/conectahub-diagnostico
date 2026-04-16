@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Diagnóstico Estratégico | ConectaHub</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--amber:#F5A623;--amber-dark:#c47d0a;--black:#111;--gray:#1a1a1a;--light:#f7f7f7}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--black);color:#e8e8e8;min-height:100vh}
+/* HEADER */
+.header{background:linear-gradient(135deg,#1a1a1a,#222);border-bottom:2px solid var(--amber);padding:20px 40px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100}
+.logo{height:40px}
+.header h1{font-size:16px;color:#fff;font-weight:600}
+.header p{font-size:12px;color:#888}
+/* PROGRESS */
+.progress-bar-wrap{background:#222;height:4px;width:100%}
+.progress-bar{height:4px;background:linear-gradient(90deg,var(--amber-dark),var(--amber));transition:width .4s ease;width:0%}
+/* STEPS */
+.step{display:none;max-width:720px;margin:0 auto;padding:40px 20px}
+.step.active{display:block}
+/* INTRO */
+.intro-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:40px;text-align:center}
+.intro-card h2{font-size:28px;font-weight:800;color:var(--amber);margin-bottom:12px}
+.intro-card p{color:#aaa;line-height:1.7;margin-bottom:24px}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+.stat{background:#111;border-radius:12px;padding:16px;border:1px solid #2a2a2a}
+.stat-num{font-size:28px;font-weight:800;color:var(--amber)}
+.stat-label{font-size:12px;color:#888;margin-top:4px}
+/* FORM */
+.section-label{display:inline-flex;align-items:center;gap:8px;background:#F5A62320;border:1px solid #F5A62340;color:var(--amber);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:24px}
+.form-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:32px;margin-bottom:20px}
+.form-row{margin-bottom:24px}
+label.field-label{display:block;font-size:14px;font-weight:600;color:#ccc;margin-bottom:8px}
+input[type=text],input[type=email]{width:100%;background:#111;border:1px solid #333;border-radius:10px;padding:12px 16px;color:#fff;font-size:15px;outline:none;transition:border .2s}
+input[type=text]:focus,input[type=email]:focus{border-color:var(--amber)}
+/* RATING */
+.question-block{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid #222}
+.question-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.q-title{font-size:15px;font-weight:600;color:#ddd;margin-bottom:6px}
+.q-hint{font-size:12px;color:#777;margin-bottom:14px;line-height:1.5}
+.rating-btns{display:flex;gap:6px;flex-wrap:wrap}
+.rating-btn{width:44px;height:44px;border-radius:10px;border:1px solid #333;background:#111;color:#888;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.rating-btn:hover{border-color:var(--amber);color:var(--amber)}
+.rating-btn.selected{background:var(--amber);border-color:var(--amber);color:#000}
+/* NAV BUTTONS */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:32px;gap:12px}
+.btn{padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:var(--amber);color:#000}
+.btn-primary:hover{background:var(--amber-dark)}
+.btn-secondary{background:#222;color:#aaa;border:1px solid #333}
+.btn-secondary:hover{background:#2a2a2a;color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+/* RESULT */
+.result-header{background:linear-gradient(135deg,#1a1a1a,#222);border:1px solid #2a2a2a;border-radius:16px;padding:32px;text-align:center;margin-bottom:24px}
+.result-name{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px}
+.result-company{font-size:14px;color:#888;margin-bottom:20px}
+.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.score-card{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:18px;text-align:center}
+.score-card.highlight{border-color:var(--amber);background:linear-gradient(135deg,#1a1a1a,#1f1a0f)}
+.s-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:6px}
+.s-val{font-size:34px;font-weight:800;color:var(--amber);line-height:1}
+.s-sub{font-size:11px;color:#555;margin-top:3px}
+.badge{display:inline-block;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:700;margin-top:12px}
+.badge.evolucao{background:var(--amber);color:#000}
+.badge.lider{background:#22c55e;color:#000}
+.badge.fragilizada{background:#ef4444;color:#fff}
+.chart-wrap{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:28px;display:flex;justify-content:center;margin-bottom:24px}
+.block-result{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:24px;margin-bottom:16px}
+.block-result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #2a2a2a}
+.block-result-title{font-size:16px;font-weight:700;color:var(--amber)}
+.block-result-avg{background:var(--amber);color:#000;padding:4px 12px;border-radius:10px;font-size:13px;font-weight:700}
+.q-row{margin-bottom:12px}
+.q-row-header{display:flex;justify-content:space-between;margin-bottom:5px}
+.q-row-text{font-size:13px;color:#bbb}
+.q-row-score{font-size:13px;font-weight:700;color:var(--amber)}
+.bar-bg{background:#2a2a2a;border-radius:4px;height:5px}
+.bar-fill{height:5px;border-radius:4px;background:linear-gradient(90deg,var(--amber-dark),var(--amber))}
+.email-sent{background:#1a3a1a;border:1px solid #2d5a2d;border-radius:12px;padding:16px;text-align:center;color:#86efac;font-size:14px;margin-bottom:20px}
+.footer{text-align:center;padding:32px;color:#444;font-size:12px}
+.footer span{color:var(--amber)}
+@media(max-width:580px){.scores-grid{grid-template-columns:repeat(2,1fr)}.rating-btns{gap:4px}.rating-btn{width:38px;height:38px;font-size:13px}.header{padding:16px 20px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img class="logo" src="https://conectahub.com.au/wp-content/uploads/2025/05/Conecta-Hub-Logo.svg" alt="ConectaHub">
+  <div>
+    <div class="h1">Diagnóstico Estratégico</div>
+    <div style="font-size:12px;color:#888">Avaliação completa do líder e do negócio</div>
+  </div>
+</div>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- STEP 0: INTRO -->
+<div class="step active" id="step-0">
+  <div style="padding:40px 20px;max-width:720px;margin:0 auto">
+    <div class="intro-card">
+      <div style="font-size:48px;margin-bottom:16px">&#128202;</div>
+      <h2>Diagnóstico Estratégico ConectaHub</h2>
+      <p>Avaliação honesta de 30 perguntas divididas em 3 pilares: <strong style="color:var(--amber)">Líder, Time e Estrutura</strong>.<br>Ao final, você recebe seu diagnóstico completo com gráficos e insights.</p>
+      <div class="intro-stats">
+        <div class="stat"><div class="stat-num">30</div><div class="stat-label">Perguntas</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Pilares</div></div>
+        <div class="stat"><div class="stat-num">~5min</div><div class="stat-label">Duração</div></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;font-size:17px;padding:16px" onclick="goTo(1)">Iniciar Diagnóstico &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 1: DADOS PESSOAIS -->
+<div class="step" id="step-1">
+  <div class="section-label">&#128100; Identificação</div>
+  <div class="form-card">
+    <div class="form-row">
+      <label class="field-label">Nome completo *</label>
+      <input type="text" id="f-nome" placeholder="Seu nome" required>
+    </div>
+    <div class="form-row">
+      <label class="field-label">Empresa *</label>
+      <input type="text" id="f-empresa" placeholder="Nome da sua empresa" required>
+    </div>
+    <div class="form-row" style="margin-bottom:0">
+      <label class="field-label">E-mail *</label>
+      <input type="email" id="f-email" placeholder="seu@email.com" required>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-secondary" onclick="goTo(0)">&#8592; Voltar</button>
+    <button class="btn btn-primary" onclick="nextFromInfo()">Próximo &#8594;</button>
+  </div>
+</div>
+
+<!-- STEP 2: LIDER -->
+<div class="step" id="step-2">
+  <div class="section-label">&#128100; Personal Scorecard &mdash; Líder</div>
+  <div class="form-card" id="questions-lider"></div>
+  <div class="nav-row">
+    <button class="btn btn-secondary" onclick="goTo(1)">&#8592; Voltar</button>
+    <button class="btn btn-primary" onclick="nextFromBlock(2,3,'lider')">Próximo &#8594;</button>
+  </div>
+</div>
+
+<!-- STEP 3: TIME -->
+<div class="step" id="step-3">
+  <div class="section-label">&#128101; Business Performance &mdash; Time</div>
+  <div class="form-card" id="questions-time"></div>
+  <div class="nav-row">
+    <button class="btn btn-secondary" onclick="goTo(2)">&#8592; Voltar</button>
+    <button class="btn btn-primary" onclick="nextFromBlock(3,4,'time')">Próximo &#8594;</button>
+  </div>
+</div>
+
+<!-- STEP 4: ESTRUTURA -->
+<div class="step" id="step-4">
+  <div class="section-label">&#127959; Business Performance &mdash; Estrutura</div>
+  <div class="form-card" id="questions-estrutura"></div>
+  <div class="nav-row">
+    <button class="btn btn-secondary" onclick="goTo(3)">&#8592; Voltar</button>
+    <button class="btn btn-primary" onclick="submitForm()">Ver meu Diagnóstico &#8594;</button>
+  </div>
+</div>
+
+<!-- STEP 5: RESULTADO -->
+<div class="step" id="step-5">
+  <div id="result-content"></div>
+  <div class="footer">Diagnóstico gerado por <span>ConectaHub</span> &bull; Confidencial &bull; <span id="result-date"></span></div>
+</div>
+
+<script>
+// ── QUESTIONS DATA ──────────────────────────────────────────
+const BLOCKS = {
+  lider: {
+    label: 'Personal Scorecard — Líder',
+    sub: 'Visão, decisão e presença de liderança',
+    questions: [
+      {t:'Como você se avalia como líder hoje?', h:'Clareza, tomada de decisão, postura e responsabilidade'},
+      {t:'Como você avalia sua saúde física atualmente?', h:'Energia, disposição e cuidado com o corpo'},
+      {t:'Como você avalia seu bem-estar mental e resiliência emocional?', h:'Pressão, estresse, capacidade de lidar com desafios'},
+      {t:'O quão apaixonado você está pelo negócio em que atua hoje?', h:'Motivação real, não apenas obrigação'},
+      {t:'Quão bem você equilibra trabalho e vida pessoal?', h:'Presença com família, descanso e limites'},
+      {t:'Com que frequência você investe no seu crescimento pessoal e profissional?', h:'Aprendizado, mentorias e desenvolvimento'},
+      {t:'Como você avalia seu nível geral de energia no dia a dia?', h:'Foco, disposição e clareza mental'},
+      {t:'Quão claro você está sobre o que realmente quer da vida e dos negócios?', h:'Visão, direção e prioridades'},
+      {t:'Se algo acontecesse com você hoje, sua família estaria financeiramente segura?', h:'Proteção, planejamento e estrutura'},
+      {t:'O quão feliz você está neste momento da sua vida?', h:'Honestamente, sem comparação'}
+    ]
+  },
+  time: {
+    label: 'Business Performance — Time',
+    sub: 'Entrega, comprometimento e alinhamento',
+    questions: [
+      {t:'Como você avalia a performance geral do seu time hoje?', h:'Entrega, comprometimento e alinhamento'},
+      {t:'Como você avalia a performance dos seus principais parceiros externos?', h:'Contabilidade, fornecedores, agências, prestadores'},
+      {t:'Quão confiante você está na experiência que seus clientes recebem hoje?', h:'Atendimento, entrega e percepção de valor'},
+      {t:'Se você se ausentasse por 30 a 90 dias, quão preparada sua empresa estaria?', h:'Operação sem suas decisões-chave'},
+      {t:'Como você avalia o desenvolvimento de novos líderes na sua empresa?', h:'Formação de liderança interna'},
+      {t:'O plano de carreira da sua empresa está estruturado?', h:'1 = Totalmente informal | 10 = Totalmente estruturado'},
+      {t:'Seu onboarding é padronizado ou depende de cada gestor?', h:'1 = Depende do gestor | 10 = Totalmente padronizado'},
+      {t:'O treinamento do seu time é contínuo?', h:'1 = Apenas na necessidade | 10 = Contínuo'},
+      {t:'A cultura da sua empresa é clara e vivida pelo time?', h:'1 = Não é clara | 10 = É clara e vivida'},
+      {t:'Seu time está preparado para sustentar o crescimento da empresa?', h:'Capacidade de escalar com qualidade'}
+    ]
+  },
+  estrutura: {
+    label: 'Business Performance — Estrutura',
+    sub: 'Sistemas, processos e maturidade operacional',
+    questions: [
+      {t:'Quão fortes e eficientes são os sistemas e processos do seu negócio?', h:'Organização, padrões e previsibilidade'},
+      {t:'O quanto a inteligência artificial está integrada ao seu negócio?', h:'Operações, marketing, atendimento e decisões'},
+      {t:'Quão bem sua empresa se adapta a mudanças de mercado e cenário econômico?', h:'Inovação e adaptabilidade'},
+      {t:'Você acompanha e toma decisões com base em dados e indicadores?', h:'Gestão por dados e métricas'},
+      {t:'Você sabe exatamente quanto precisa faturar para ser lucrativo?', h:'Previsibilidade financeira e ponto de equilíbrio'},
+      {t:'Os setores da sua empresa estão bem definidos?', h:'1 = Se sobrepõem | 10 = Bem definidos'},
+      {t:'Sua área de vendas é organizada e previsível?', h:'Processo comercial estruturado'},
+      {t:'Sua operação roda com eficiência?', h:'Produtividade e otimização de processos'},
+      {t:'A administração financeira está sob controle?', h:'1 = Gera surpresas | 10 = Sob controle'},
+      {t:'Existe um planejamento estratégico para os próximos 1–3 anos?', h:'Visão de futuro e plano de crescimento'}
+    ]
+  }
+};
+
+// ── STATE ────────────────────────────────────────────────────
+const answers = { lider: new Array(10).fill(0), time: new Array(10).fill(0), estrutura: new Array(10).fill(0) };
+let currentStep = 0;
+const TOTAL_STEPS = 5;
+
+// ── INIT ─────────────────────────────────────────────────────
+function buildQuestions(blockKey, containerId) {
+  const block = BLOCKS[blockKey];
+  const container = document.getElementById(containerId);
+  container.innerHTML = block.questions.map((q, i) => `
+    <div class="question-block">
+      <div class="q-title">${i+1}. ${q.t}</div>
+      ${q.h ? `<div class="q-hint">${q.h}</div>` : ''}
+      <div class="rating-btns" id="rating-${blockKey}-${i}">
+        ${[1,2,3,4,5,6,7,8,9,10].map(n => `
+          <button class="rating-btn ${answers[blockKey][i]===n?'selected':''}" onclick="setRating('${blockKey}',${i},${n},this)">${n}</button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+buildQuestions('lider','questions-lider');
+buildQuestions('time','questions-time');
+buildQuestions('estrutura','questions-estrutura');
+
+// ── NAV ──────────────────────────────────────────────────────
+function goTo(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-'+n).classList.add('active');
+  currentStep = n;
+  document.getElementById('progressBar').style.width = (n/TOTAL_STEPS*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextFromInfo() {
+  const nome = document.getElementById('f-nome').value.trim();
+  const empresa = document.getElementById('f-empresa').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!nome || !empresa || !email) { alert('Por favor, preencha todos os campos.'); return; }
+  if (!email.includes('@')) { alert('Por favor, insira um e-mail válido.'); return; }
+  goTo(2);
+}
+
+function nextFromBlock(from, to, blockKey) {
+  const unanswered = answers[blockKey].filter(v => v === 0).length;
+  if (unanswered > 0) {
+    alert('Por favor, responda todas as ' + unanswered + ' pergunta(s) restante(s) deste bloco.');
+    return;
+  }
+  goTo(to);
+}
+
+// ── RATING ───────────────────────────────────────────────────
+function setRating(block, idx, val, btn) {
+  answers[block][idx] = val;
+  const btns = document.querySelectorAll('#rating-'+block+'-'+idx+' .rating-btn');
+  btns.forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+// ── CALCULATE ────────────────────────────────────────────────
+function avg(arr) {
+  const valid = arr.filter(v => v > 0);
+  if (!valid.length) return 0;
+  return +(valid.reduce((a,b)=>a+b,0) / valid.length).toFixed(1);
+}
+
+function getClassificacao(geral) {
+  if (geral >= 8) return {label:'Líder de Alto Impacto', cls:'lider'};
+  if (geral >= 6) return {label:'Em Evolução', cls:'evolucao'};
+  return {label:'Estrutura Fragilizada', cls:'fragilizada'};
+}
+
+// ── SUBMIT ───────────────────────────────────────────────────
+function submitForm() {
+  const unanswered = answers.estrutura.filter(v => v === 0).length;
+  if (unanswered > 0) { alert('Por favor, responda todas as perguntas deste bloco.'); return; }
+
+  const nome = document.getElementById('f-nome').value.trim();
+  const empresa = document.getElementById('f-empresa').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  const avgLider = avg(answers.lider);
+  const avgTime = avg(answers.time);
+  const avgEstrutura = avg(answers.estrutura);
+  const avgGeral = +((avgLider + avgTime + avgEstrutura) / 3).toFixed(1);
+  const pontos = Math.round(avgGeral * 10);
+  const classif = getClassificacao(avgGeral);
+
+  const date = new Date().toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+  document.getElementById('result-date').textContent = date;
+
+  // Build result HTML
+  const blockHTML = (blockKey, title, sub, avgVal) => `
+    <div class="block-result">
+      <div class="block-result-header">
+        <div>
+          <div class="block-result-title">${title}</div>
+          <div style="font-size:12px;color:#777;margin-top:2px">${sub}</div>
+        </div>
+        <div class="block-result-avg">Média: ${avgVal}</div>
+      </div>
+      ${BLOCKS[blockKey].questions.map((q,i) => `
+        <div class="q-row">
+          <div class="q-row-header">
+            <span class="q-row-text">${i+1}. ${q.t}</span>
+            <span class="q-row-score">${answers[blockKey][i]}</span>
+          </div>
+          <div class="bar-bg"><div class="bar-fill" style="width:${answers[blockKey][i]*10}%"></div></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  document.getElementById('result-content').innerHTML = `
+    <div class="result-header">
+      <div class="result-name">${nome}</div>
+      <div class="result-company">${empresa} &bull; ${date}</div>
+      <div class="scores-grid">
+        <div class="score-card highlight">
+          <div class="s-label">Líder</div>
+          <div class="s-val">${avgLider}</div>
+          <div class="s-sub">/ 10</div>
+        </div>
+        <div class="score-card">
+          <div class="s-label">Time</div>
+          <div class="s-val">${avgTime}</div>
+          <div class="s-sub">/ 10</div>
+        </div>
+        <div class="score-card">
+          <div class="s-label">Estrutura</div>
+          <div class="s-val">${avgEstrutura}</div>
+          <div class="s-sub">/ 10</div>
+        </div>
+        <div class="score-card highlight">
+          <div class="s-label">Geral</div>
+          <div class="s-val">${avgGeral}</div>
+          <div class="s-sub">${pontos} pts</div>
+        </div>
+      </div>
+      <span class="badge ${classif.cls}">${classif.label}</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="radarChart" width="320" height="320"></canvas>
+    </div>
+    <div id="email-status"></div>
+    ${blockHTML('lider','Personal Scorecard — Líder','Visão, decisão e presença de liderança',avgLider)}
+    ${blockHTML('time','Business Performance — Time','Entrega, comprometimento e alinhamento',avgTime)}
+    ${blockHTML('estrutura','Business Performance — Estrutura','Sistemas, processos e maturidade operacional',avgEstrutura)}
+  `;
+
+  goTo(5);
+
+  // Radar chart
+  setTimeout(() => {
+    new Chart(document.getElementById('radarChart').getContext('2d'), {
+      type:'radar',
+      data:{
+        labels:['Líder','Time','Estrutura'],
+        datasets:[{label:nome,data:[avgLider,avgTime,avgEstrutura],backgroundColor:'rgba(245,166,35,0.15)',borderColor:'#F5A623',borderWidth:2.5,pointBackgroundColor:'#F5A623',pointRadius:5}]
+      },
+      options:{responsive:false,scales:{r:{min:0,max:10,ticks:{stepSize:2,color:'#666',backdropColor:'transparent'},grid:{color:'#2a2a2a'},angleLines:{color:'#2a2a2a'},pointLabels:{color:'#ccc',font:{size:14,weight:'600'}}}},plugins:{legend:{display:false}}}
+    });
+  }, 100);
+
+  // Send email via EmailJS
+  sendEmail(nome, empresa, email, avgLider, avgTime, avgEstrutura, avgGeral, pontos, classif.label);
+}
+
+// ── EMAIL ────────────────────────────────────────────────────
+function sendEmail(nome, empresa, email, avgLider, avgTime, avgEstrutura, avgGeral, pontos, classif) {
+  // EmailJS - needs config in settings
+  const SERVICE_ID = 'conectahub_service';
+  const TEMPLATE_ID = 'diagnostico_template';
+  const PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY'; // to be configured
+
+  const detalhes = Object.keys(BLOCKS).map(bk => {
+    return BLOCKS[bk].label + '\n' +
+      BLOCKS[bk].questions.map((q,i) => (i+1)+'. '+q.t+' → '+answers[bk][i]).join('\n');
+  }).join('\n\n');
+
+  emailjs.init(PUBLIC_KEY);
+  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+    to_name: nome,
+    to_email: email,
+    empresa: empresa,
+    avg_lider: avgLider,
+    avg_time: avgTime,
+    avg_estrutura: avgEstrutura,
+    avg_geral: avgGeral,
+    pontos: pontos,
+    classificacao: classif,
+    detalhes: detalhes,
+    data: new Date().toLocaleDateString('pt-BR')
+  }).then(() => {
+    const el = document.getElementById('email-status');
+    if (el) el.innerHTML = '<div class="email-sent">&#10003; Diagnóstico enviado para <strong>' + email + '</strong></div>';
+  }).catch(err => {
+    console.error('EmailJS error:', err);
+  });
+}
+</script>
+</body>
+</html>
