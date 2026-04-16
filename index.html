@@ -176,17 +176,17 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--amber)}
 const BLOCKS = {
   lider: {
     label: 'Personal Scorecard — Líder',
-    sub: 'Visão, decisão e presença de liderança',
+    sub: 'Consciência, energia e clareza do líder',
     questions: [
       {t:'Como você se avalia como líder hoje?', h:'Clareza, tomada de decisão, postura e responsabilidade'},
       {t:'Como você avalia sua saúde física atualmente?', h:'Energia, disposição e cuidado com o corpo'},
-      {t:'Como você avalia seu bem-estar mental e resiliência emocional?', h:'Pressão, estresse, capacidade de lidar com desafios'},
+      {t:'Como você avalia seu bem-estar mental e sua resiliência emocional?', h:'Pressão, estresse, capacidade de lidar com desafios'},
       {t:'O quão apaixonado você está pelo negócio em que atua hoje?', h:'Motivação real, não apenas obrigação'},
       {t:'Quão bem você equilibra trabalho e vida pessoal?', h:'Presença com família, descanso e limites'},
-      {t:'Com que frequência você investe no seu crescimento pessoal e profissional?', h:'Aprendizado, mentorias e desenvolvimento'},
+      {t:'Com que frequência você investe no seu crescimento pessoal e profissional?', h:'1 = Raramente | 10 = Constantemente'},
       {t:'Como você avalia seu nível geral de energia no dia a dia?', h:'Foco, disposição e clareza mental'},
       {t:'Quão claro você está sobre o que realmente quer da vida e dos negócios?', h:'Visão, direção e prioridades'},
-      {t:'Se algo acontecesse com você hoje, sua família estaria financeiramente segura?', h:'Proteção, planejamento e estrutura'},
+      {t:'Se algo acontecesse com você hoje, sua família estaria financeiramente e estruturalmente segura amanhã?', h:'Proteção, planejamento e estrutura'},
       {t:'O quão feliz você está neste momento da sua vida?', h:'Honestamente, sem comparação'}
     ]
   },
@@ -194,32 +194,32 @@ const BLOCKS = {
     label: 'Business Performance — Time',
     sub: 'Entrega, comprometimento e alinhamento',
     questions: [
-      {t:'Como você avalia a performance geral do seu time hoje?', h:'Entrega, comprometimento e alinhamento'},
-      {t:'Como você avalia a performance dos seus principais parceiros externos?', h:'Contabilidade, fornecedores, agências, prestadores'},
-      {t:'Quão confiante você está na experiência que seus clientes recebem hoje?', h:'Atendimento, entrega e percepção de valor'},
-      {t:'Se você se ausentasse por 30 a 90 dias, quão preparada sua empresa estaria?', h:'Operação sem suas decisões-chave'},
-      {t:'Como você avalia o desenvolvimento de novos líderes na sua empresa?', h:'Formação de liderança interna'},
-      {t:'O plano de carreira da sua empresa está estruturado?', h:'1 = Totalmente informal | 10 = Totalmente estruturado'},
+      {t:'Como você avalia a performance geral do seu time hoje?', h:'Entrega, comprometimento, alinhamento e resultado'},
+      {t:'Como você avalia a performance dos seus principais parceiros externos?', h:'Contabilidade, fornecedores, agências, prestadores de serviço'},
+      {t:'Quão confiante você está na experiência que seus clientes recebem hoje?', h:'Atendimento, entrega, percepção de valor e recorrência'},
+      {t:'Se você se ausentasse por 30 a 90 dias, quão preparada sua empresa estaria para operar sem suas decisões-chave?', h:'Autonomia operacional da equipe'},
+      {t:'Como você avalia o desenvolvimento de novos líderes dentro da sua empresa hoje?', h:'Formação e promoção de liderança interna'},
+      {t:'O plano de carreira da sua empresa está estruturado ou ainda é informal?', h:'1 = Totalmente informal | 10 = Totalmente estruturado'},
       {t:'Seu onboarding é padronizado ou depende de cada gestor?', h:'1 = Depende do gestor | 10 = Totalmente padronizado'},
-      {t:'O treinamento do seu time é contínuo?', h:'1 = Apenas na necessidade | 10 = Contínuo'},
-      {t:'A cultura da sua empresa é clara e vivida pelo time?', h:'1 = Não é clara | 10 = É clara e vivida'},
-      {t:'Seu time está preparado para sustentar o crescimento da empresa?', h:'Capacidade de escalar com qualidade'}
+      {t:'O treinamento do seu time é contínuo ou acontece apenas quando surge necessidade?', h:'1 = Apenas na necessidade | 10 = Contínuo'},
+      {t:'A cultura da sua empresa é clara e vivida pelo time no dia a dia?', h:'1 = Não é clara | 10 = É clara e vivida'},
+      {t:'Seu time está preparado para sustentar o crescimento da empresa?', h:'Capacidade de escalar mantendo qualidade e cultura'}
     ]
   },
   estrutura: {
     label: 'Business Performance — Estrutura',
-    sub: 'Sistemas, processos e maturidade operacional',
+    sub: 'Estrutura, previsibilidade e maturidade do negócio',
     questions: [
-      {t:'Quão fortes e eficientes são os sistemas e processos do seu negócio?', h:'Organização, padrões e previsibilidade'},
-      {t:'O quanto a inteligência artificial está integrada ao seu negócio?', h:'Operações, marketing, atendimento e decisões'},
-      {t:'Quão bem sua empresa se adapta a mudanças de mercado e cenário econômico?', h:'Inovação e adaptabilidade'},
-      {t:'Você acompanha e toma decisões com base em dados e indicadores?', h:'Gestão por dados e métricas'},
+      {t:'Quão fortes e eficientes são os sistemas e processos do seu negócio atualmente?', h:'Organização, padrões e previsibilidade'},
+      {t:'Como você avalia a Inteligência Artificial integrada ao seu negócio hoje?', h:'Operações, marketing, atendimento e tomada de decisão'},
+      {t:'Quão bem sua empresa se adapta a mudanças de mercado, concorrência e cenário econômico?', h:'Inovação e adaptabilidade estratégica'},
+      {t:'Você acompanha e toma decisões com base em dados e indicadores do negócio?', h:'Gestão por dados e métricas'},
       {t:'Você sabe exatamente quanto precisa faturar para ser lucrativo?', h:'Previsibilidade financeira e ponto de equilíbrio'},
-      {t:'Os setores da sua empresa estão bem definidos?', h:'1 = Se sobrepõem | 10 = Bem definidos'},
-      {t:'Sua área de vendas é organizada e previsível?', h:'Processo comercial estruturado'},
-      {t:'Sua operação roda com eficiência?', h:'Produtividade e otimização de processos'},
-      {t:'A administração financeira está sob controle?', h:'1 = Gera surpresas | 10 = Sob controle'},
-      {t:'Existe um planejamento estratégico para os próximos 1–3 anos?', h:'Visão de futuro e plano de crescimento'}
+      {t:'Os setores da sua empresa estão bem definidos ou ainda se sobrepõem?', h:'1 = Se sobrepõem | 10 = Bem definidos'},
+      {t:'Sua área de vendas é organizada e previsível?', h:'Processo comercial estruturado e recorrênte'},
+      {t:'Sua operação roda com eficiência?', h:'Produtividade, otimização e baixo retrabalho'},
+      {t:'A administração financeira está sob controle ou ainda gera surpresas?', h:'1 = Gera surpresas | 10 = Sob controle'},
+      {t:'Existe um planejamento estratégico para os próximos 1–3 anos?', h:'Visão de futuro, metas e plano de crescimento'}
     ]
   }
 };
