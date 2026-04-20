@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin — Diagnóstico ConectaHub</title>
+<title>Admin â DiagnÃ³stico ConectaHub</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -94,26 +94,26 @@ canvas{max-height:280px}
   <div style="display:flex;align-items:center;gap:16px">
     <img src="https://conectahub.com.au/wp-content/uploads/2025/05/Conecta-Hub-Logo.svg" class="logo" alt="ConectaHub">
     <div class="header-title">
-      <h1>Painel Admin — Diagnóstico</h1>
-      <p>Visão geral de todos os membros</p>
+      <h1>Painel Admin â DiagnÃ³stico</h1>
+      <p>VisÃ£o geral de todos os membros</p>
     </div>
   </div>
-  <button class="btn" onclick="loadData()">↺ Atualizar</button>
+  <button class="btn" onclick="loadData()">âº Atualizar</button>
 </header>
 <div class="container">
   <div class="stats-grid">
     <div class="stat-card highlight"><div class="stat-num" id="total">0</div><div class="stat-label">Total de Membros</div></div>
-    <div class="stat-card"><div class="stat-num" id="media">—</div><div class="stat-label">Média Geral do Grupo</div></div>
-    <div class="stat-card"><div class="stat-num" id="maior">—</div><div class="stat-label">Maior Pontuação</div></div>
-    <div class="stat-card"><div class="stat-num" id="menor">—</div><div class="stat-label">Menor Pontuação</div></div>
+    <div class="stat-card"><div class="stat-num" id="media">â</div><div class="stat-label">MÃ©dia Geral do Grupo</div></div>
+    <div class="stat-card"><div class="stat-num" id="maior">â</div><div class="stat-label">Maior PontuaÃ§Ã£o</div></div>
+    <div class="stat-card"><div class="stat-num" id="menor">â</div><div class="stat-label">Menor PontuaÃ§Ã£o</div></div>
   </div>
   <div class="charts-grid">
     <div class="chart-card">
-      <div class="chart-title">Distribuição por Classificação</div>
+      <div class="chart-title">DistribuiÃ§Ã£o por ClassificaÃ§Ã£o</div>
       <canvas id="pieChart"></canvas>
     </div>
     <div class="chart-card">
-      <div class="chart-title">Médias por Bloco (Grupo)</div>
+      <div class="chart-title">MÃ©dias por Bloco (Grupo)</div>
       <canvas id="barChart"></canvas>
     </div>
   </div>
@@ -123,15 +123,15 @@ canvas{max-height:280px}
       <thead>
         <tr>
           <th>Data</th><th>Nome</th><th>Empresa</th>
-          <th>Líder</th><th>Time</th><th>Estrutura</th>
-          <th>Geral</th><th>Classificação</th>
+          <th>LÃ­der</th><th>Time</th><th>Estrutura</th>
+          <th>Geral</th><th>ClassificaÃ§Ã£o</th>
         </tr>
       </thead>
-      <tbody id="membersTable"><tr><td colspan="8" style="text-align:center;color:#555;padding:32px">Nenhum diagnóstico recebido ainda.</td></tr></tbody>
+      <tbody id="membersTable"><tr><td colspan="8" style="text-align:center;color:#555;padding:32px">Nenhum diagnÃ³stico recebido ainda.</td></tr></tbody>
     </table>
   </div>
-  <div class="section-title" style="margin-top:32px">📋 Scorecard Detalhado — Todas as Respostas</div>
-  <p style="color:#666;font-size:13px;margin-bottom:16px">Verde = 8–10 &nbsp;|&nbsp; Amarelo = 5–7 &nbsp;|&nbsp; Vermelho = 1–4</p>
+  <div class="section-title" style="margin-top:32px">ð Scorecard Detalhado â Todas as Respostas</div>
+  <p style="color:#666;font-size:13px;margin-bottom:16px">Verde = 8â10 &nbsp;|&nbsp; Amarelo = 5â7 &nbsp;|&nbsp; Vermelho = 1â4</p>
   <div class="scorecard-wrap">
     <table class="scorecard-table">
       <thead id="scorecardHead"></thead>
@@ -144,45 +144,45 @@ const WEBHOOK = 'https://script.google.com/macros/s/AKfycbx_2QBhN2b__HgzepzBe3WE
 let pieChart, barChart;
 
 const Q_LIDER = [
-  'Como você se avalia como líder hoje?',
-  'Saúde física',
-  'Bem-estar mental e resiliência',
-  'Paixão pelo negócio',
-  'Equilíbrio trabalho/vida',
+  'Como vocÃª se avalia como lÃ­der hoje?',
+  'SaÃºde fÃ­sica',
+  'Bem-estar mental e resiliÃªncia',
+  'PaixÃ£o pelo negÃ³cio',
+  'EquilÃ­brio trabalho/vida',
   'Investimento em crescimento pessoal',
-  'Nível de energia',
+  'NÃ­vel de energia',
   'Clareza sobre o que quer da vida',
-  'Segurança financeira familiar',
+  'SeguranÃ§a financeira familiar',
   'Felicidade no momento atual'
 ];
 const Q_TIME = [
   'Performance geral do time',
   'Performance dos parceiros externos',
-  'Confiança na experiência do cliente',
-  'Empresa operando sem você 30-90 dias',
-  'Desenvolvimento de novos líderes',
+  'ConfianÃ§a na experiÃªncia do cliente',
+  'Empresa operando sem vocÃª 30-90 dias',
+  'Desenvolvimento de novos lÃ­deres',
   'Plano de carreira estruturado',
   'Onboarding padronizado',
-  'Treinamento contínuo do time',
+  'Treinamento contÃ­nuo do time',
   'Cultura clara e vivida pelo time',
   'Time preparado para crescimento'
 ];
 const Q_ESTRUTURA = [
-  'Sistemas e processos do negócio',
-  'IA integrada ao negócio',
-  'Adaptação a mudanças de mercado',
-  'Decisões baseadas em dados',
+  'Sistemas e processos do negÃ³cio',
+  'IA integrada ao negÃ³cio',
+  'AdaptaÃ§Ã£o a mudanÃ§as de mercado',
+  'DecisÃµes baseadas em dados',
   'Conhece o ponto de lucratividade',
   'Setores bem definidos',
-  'Área de vendas organizada e previsível',
-  'Operação eficiente',
-  'Administração financeira sob controle',
-  'Planejamento estratégico 1-3 anos'
+  'Ãrea de vendas organizada e previsÃ­vel',
+  'OperaÃ§Ã£o eficiente',
+  'AdministraÃ§Ã£o financeira sob controle',
+  'Planejamento estratÃ©gico 1-3 anos'
 ];
 
 function sq(v) {
   const n = parseFloat(v);
-  let cls = 'sq-empty', display = '—';
+  let cls = 'sq-empty', display = 'â';
   if (v !== '' && v !== null && v !== undefined && !isNaN(n)) {
     display = n;
     if (n >= 8) cls = 'sq-green';
@@ -216,10 +216,10 @@ function buildScorecardHead() {
   let row1 = '<tr>';
   row1 += '<th class="name-col" rowspan="2">Nome</th>';
   row1 += '<th class="empresa-col" rowspan="2" style="text-align:left">Empresa</th>';
-  row1 += '<th class="lider-header" colspan="10" style="text-align:center;font-size:11px;text-transform:uppercase">👤 LÍDER — Liderança Pessoal</th>';
-  row1 += '<th class="time-header" colspan="10" style="text-align:center;font-size:11px;text-transform:uppercase">👥 TIME — Performance do Time</th>';
-  row1 += '<th class="estrutura-header" colspan="10" style="text-align:center;font-size:11px;text-transform:uppercase">🏗️ ESTRUTURA — Business Performance</th>';
-  row1 += '<th class="total-header" rowspan="2" style="text-align:center">Líder</th>';
+  row1 += '<th class="lider-header" colspan="10" style="text-align:center;font-size:11px;text-transform:uppercase">ð¤ LÃDER â LideranÃ§a Pessoal</th>';
+  row1 += '<th class="time-header" colspan="10" style="text-align:center;font-size:11px;text-transform:uppercase">ð¥ TIME â Performance do Time</th>';
+  row1 += '<th class="estrutura-header" colspan="10" style="text-align:center;font-size:11px;text-transform:uppercase">ðï¸ ESTRUTURA â Business Performance</th>';
+  row1 += '<th class="total-header" rowspan="2" style="text-align:center">LÃ­der</th>';
   row1 += '<th class="total-header" rowspan="2" style="text-align:center">Time</th>';
   row1 += '<th class="total-header" rowspan="2" style="text-align:center">Estr.</th>';
   row1 += '<th class="total-header" rowspan="2" style="text-align:center">Geral</th>';
@@ -256,7 +256,7 @@ function buildScorecardRow(m) {
   var eKeys = ['E1','E2','E3','E4','E5','E6','E7','E8','E9','E10'];
   var html = '<tr>';
   html += '<td class="name-col">' + (m['Nome']||'') + '</td>';
-  html += '<td class="empresa-col">' + (m['Empresa']||'—') + '</td>';
+  html += '<td class="empresa-col">' + (m['Empresa']||'â') + '</td>';
   lKeys.forEach(function(k,i){
     html += '<td class="' + (i===0?'lider-block':'') + '">' + sq(m[k]) + '</td>';
   });
@@ -266,7 +266,7 @@ function buildScorecardRow(m) {
   eKeys.forEach(function(k,i){
     html += '<td class="' + (i===0?'estrutura-block':'') + '">' + sq(m[k]) + '</td>';
   });
-  var lv = parseFloat(m['Líder']||0);
+  var lv = parseFloat(m['LÃ­der']||0);
   var tv = parseFloat(m['Time']||0);
   var ev = parseFloat(m['Estrutura']||0);
   var gv = parseFloat(m['Geral']||0);
@@ -294,11 +294,11 @@ async function loadData() {
 
     var tbody = document.getElementById('membersTable');
     tbody.innerHTML = data.map(function(m){
-      var cls = m['Classificação']||'';
+      var cls = m['ClassificaÃ§Ã£o']||'';
       return '<tr><td style="color:#666;font-size:12px">' + formatDate(m['Data']) + '</td>' +
         '<td style="font-weight:600">' + (m['Nome']||'') + '</td>' +
-        '<td style="color:#888">' + (m['Empresa']||'—') + '</td>' +
-        '<td>' + parseFloat(m['Líder']||0).toFixed(1) + '</td>' +
+        '<td style="color:#888">' + (m['Empresa']||'â') + '</td>' +
+        '<td>' + parseFloat(m['LÃ­der']||0).toFixed(1) + '</td>' +
         '<td>' + parseFloat(m['Time']||0).toFixed(1) + '</td>' +
         '<td>' + parseFloat(m['Estrutura']||0).toFixed(1) + '</td>' +
         '<td class="score">' + parseFloat(m['Geral']||0).toFixed(1) + '</td>' +
@@ -307,7 +307,7 @@ async function loadData() {
 
     var counts = {alto:0, evolucao:0, fragilizada:0};
     data.forEach(function(m){
-      var c = (m['Classificação']||'').toLowerCase();
+      var c = (m['ClassificaÃ§Ã£o']||'').toLowerCase();
       if (c.includes('alto')) counts.alto++;
       else if (c.includes('fragiliz')) counts.fragilizada++;
       else counts.evolucao++;
@@ -316,27 +316,62 @@ async function loadData() {
     if (pieChart) pieChart.destroy();
     pieChart = new Chart(document.getElementById('pieChart'),{
       type:'doughnut',
-      data:{labels:['Líder de Alto Impacto','Em Evolução','Estrutura Fragilizada'],
+      data:{labels:['LÃ­der de Alto Impacto','Em EvoluÃ§Ã£o','Estrutura Fragilizada'],
         datasets:[{data:[counts.alto,counts.evolucao,counts.fragilizada],backgroundColor:['#22c55e','#F5A623','#ef4444'],borderWidth:0}]},
       options:{plugins:{legend:{position:'top',labels:{color:'#aaa',padding:16}}},cutout:'60%'}
     });
 
     function avg(arr){ return arr.length?(arr.reduce(function(a,b){return a+b;},0)/arr.length).toFixed(1):0; }
-    var aL = data.map(function(m){return parseFloat(m['Líder']||0);}).filter(function(n){return !isNaN(n);});
+    var aL = data.map(function(m){return parseFloat(m['LÃ­der']||0);}).filter(function(n){return !isNaN(n);});
     var aT = data.map(function(m){return parseFloat(m['Time']||0);}).filter(function(n){return !isNaN(n);});
     var aE = data.map(function(m){return parseFloat(m['Estrutura']||0);}).filter(function(n){return !isNaN(n);});
 
     if (barChart) barChart.destroy();
     barChart = new Chart(document.getElementById('barChart'),{
       type:'bar',
-      data:{labels:['Líder','Time','Estrutura'],datasets:[{data:[avg(aL),avg(aT),avg(aE)],backgroundColor:'#F5A623',borderRadius:6}]},
+      data:{labels:['LÃ­der','Time','Estrutura'],datasets:[{data:[avg(aL),avg(aT),avg(aE)],backgroundColor:'#F5A623',borderRadius:6}]},
       options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:10,ticks:{color:'#888'},grid:{color:'#222'}},x:{ticks:{color:'#aaa'},grid:{display:false}}}}
     });
 
     buildScorecardHead();
-    document.getElementById('scorecardBody').innerHTML = data.map(function(m){
-      return buildScorecardRow(m);
-    }).join('');
+    var memberRows = data.map(function(m){ return buildScorecardRow(m); }).join('');
+
+    var lKeys = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10'];
+    var tKeys = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10'];
+    var eKeys = ['E1','E2','E3','E4','E5','E6','E7','E8','E9','E10'];
+    var allKeys = lKeys.concat(tKeys).concat(eKeys);
+
+    function avgOf(key) {
+      var vals = data.map(function(m){ return parseFloat(m[key]); }).filter(function(n){ return !isNaN(n) && n > 0; });
+      if (!vals.length) return '—';
+      return (vals.reduce(function(a,b){ return a+b; }, 0) / vals.length).toFixed(1);
+    }
+
+    var avgRow = '<tr style="border-top:2px solid #F5A623;background:#111827;">';
+    avgRow += '<td class="name-col" style="color:#F5A623;font-weight:700;font-size:11px;white-space:nowrap;">📊 Média do Grupo</td>';
+    avgRow += '<td class="empresa-col" style="color:#6b7280;font-size:11px;">—</td>';
+
+    allKeys.forEach(function(k, i) {
+      var bc = (i===0)?'lider-block':(i===10)?'time-block':(i===20)?'estrutura-block':'';
+      avgRow += '<td class="' + bc + '">' + sq(avgOf(k)) + '</td>';
+    });
+
+    function blockAvg(keys) {
+      var vals = [];
+      data.forEach(function(m){ keys.forEach(function(k){ var v=parseFloat(m[k]); if(!isNaN(v)&&v>0) vals.push(v); }); });
+      if (!vals.length) return '—';
+      return (vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(1);
+    }
+    avgRow += '<td class="total-block">' + sq(blockAvg(lKeys)) + '</td>';
+    avgRow += '<td>' + sq(blockAvg(tKeys)) + '</td>';
+    avgRow += '<td>' + sq(blockAvg(eKeys)) + '</td>';
+    var gVals = data.map(function(m){ return parseFloat(m['Líder']||m['Líder']||m['Geral']); }).filter(function(n){ return !isNaN(n)&&n>0; });
+    var gAvg2 = data.map(function(m){ return parseFloat(m['Geral']); }).filter(function(n){ return !isNaN(n)&&n>0; });
+    var gAvgVal = gAvg2.length ? (gAvg2.reduce(function(a,b){return a+b;},0)/gAvg2.length).toFixed(1) : '—';
+    avgRow += '<td>' + sq(gAvgVal) + '</td>';
+    avgRow += '</tr>';
+
+    document.getElementById('scorecardBody').innerHTML = memberRows + avgRow;
 
   } catch(e) {
     console.error(e);
