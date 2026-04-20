@@ -1,11 +1,4 @@
-  <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
-    <input id="scorecardFilter" type="text" placeholder="🔍 Filtrar por nome..." 
-      oninput="filterScorecard(this.value)"
-      style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px 14px;color:#e8e8e8;font-size:13px;width:280px;outline:none;"
-      onfocus="this.style.borderColor='#F5A623'" onblur="this.style.borderColor='#333'">
-    <span id="scorecardCount" style="color:#888;font-size:12px;"></span>
-  </div>
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -96,36 +89,8 @@ canvas{max-height:280px}
 .sq-empty{background:rgba(255,255,255,.03);color:#444;font-size:10px}
 
 .scorecard-table th.q-header{position:relative;}
-.scorecard-table th.q-header:hover::after{
-  content:attr(data-tooltip);
-  position:absolute;
-  bottom:calc(100% + 6px);
-  left:50%;
-  transform:translateX(-50%);
-  background:#1f2937;
-  color:#f9fafb;
-  padding:6px 10px;
-  border-radius:6px;
-  font-size:12px;
-  width:max-content;
-  max-width:260px;
-  white-space:normal;
-  z-index:999;
-  pointer-events:none;
-  border:1px solid #F5A623;
-  box-shadow:0 4px 12px rgba(0,0,0,0.4);
-  line-height:1.4;
-}
-.scorecard-table th.q-header:hover::before{
-  content:'';
-  position:absolute;
-  bottom:calc(100% + 1px);
-  left:50%;
-  transform:translateX(-50%);
-  border:5px solid transparent;
-  border-top-color:#F5A623;
-  z-index:1000;
-}
+.scorecard-table th.q-header:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1f2937;color:#f9fafb;padding:6px 10px;border-radius:6px;font-size:12px;width:max-content;max-width:260px;white-space:normal;z-index:999;pointer-events:none;border:1px solid #F5A623;box-shadow:0 4px 12px rgba(0,0,0,0.4);line-height:1.4;}
+.scorecard-table th.q-header:hover::before{content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#F5A623;z-index:1000;}
 </style>
 </head>
 <body>
@@ -171,6 +136,7 @@ canvas{max-height:280px}
   </div>
   <div class="section-title" style="margin-top:32px">📋 Scorecard Detalhado — Todas as Respostas</div>
   <p style="color:#666;font-size:13px;margin-bottom:16px">Verde = 8–10 &nbsp;|&nbsp; Amarelo = 5–7 &nbsp;|&nbsp; Vermelho = 1–4</p>
+    <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px;"><input id="scorecardFilter" type="text" placeholder="🔍 Filtrar por nome..." oninput="filterScorecard(this.value)" style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px 14px;color:#e8e8e8;font-size:13px;width:280px;outline:none;" onfocus="this.style.borderColor='#F5A623'" onblur="this.style.borderColor='#333'"><span id="scorecardCount" style="color:#888;font-size:12px;margin-left:8px;"></span></div>
   <div class="scorecard-wrap">
     <table class="scorecard-table">
       <thead id="scorecardHead"></thead>
@@ -317,19 +283,7 @@ function buildScorecardRow(m) {
   return html;
 }
 
-async function filterScorecard(term) {
-  var rows = document.querySelectorAll('#scorecardBody tr');
-  var count = 0;
-  rows.forEach(function(row) {
-    var name = row.cells[0] ? row.cells[0].textContent.trim().toLowerCase() : '';
-    if (name.includes('média') || name.includes('media')) { row.style.display=''; return; }
-    var show = !term || name.includes(term.toLowerCase());
-    row.style.display = show ? '' : 'none';
-    if (show) count++;
-  });
-  var el = document.getElementById('scorecardCount');
-  if (el) el.textContent = term ? count + ' resultado(s)' : '';
-}
+async function filterScorecard(t){var rows=document.querySelectorAll('#scorecardBody tr');var c=0;rows.forEach(function(r){var n=r.cells[0]?r.cells[0].textContent.trim().toLowerCase():'';if(n.includes('média')){r.style.display='';return;}var s=!t||n.includes(t.toLowerCase());r.style.display=s?''  :'none';if(s)c++;});var el=document.getElementById('scorecardCount');if(el)el.textContent=t?c+' resultado(s)':'';}
 
 function loadData() {
   try {
