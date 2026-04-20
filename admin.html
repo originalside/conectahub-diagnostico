@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+  <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+    <input id="scorecardFilter" type="text" placeholder="🔍 Filtrar por nome..." 
+      oninput="filterScorecard(this.value)"
+      style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px 14px;color:#e8e8e8;font-size:13px;width:280px;outline:none;"
+      onfocus="this.style.borderColor='#F5A623'" onblur="this.style.borderColor='#333'">
+    <span id="scorecardCount" style="color:#888;font-size:12px;"></span>
+  </div>
+  <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -87,6 +94,38 @@ canvas{max-height:280px}
 .sq-amber{background:rgba(245,166,35,.2);color:#F5A623}
 .sq-red{background:rgba(239,68,68,.2);color:#ef4444}
 .sq-empty{background:rgba(255,255,255,.03);color:#444;font-size:10px}
+
+.scorecard-table th.q-header{position:relative;}
+.scorecard-table th.q-header:hover::after{
+  content:attr(data-tooltip);
+  position:absolute;
+  bottom:calc(100% + 6px);
+  left:50%;
+  transform:translateX(-50%);
+  background:#1f2937;
+  color:#f9fafb;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:12px;
+  width:max-content;
+  max-width:260px;
+  white-space:normal;
+  z-index:999;
+  pointer-events:none;
+  border:1px solid #F5A623;
+  box-shadow:0 4px 12px rgba(0,0,0,0.4);
+  line-height:1.4;
+}
+.scorecard-table th.q-header:hover::before{
+  content:'';
+  position:absolute;
+  bottom:calc(100% + 1px);
+  left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:#F5A623;
+  z-index:1000;
+}
 </style>
 </head>
 <body>
@@ -228,19 +267,19 @@ function buildScorecardHead() {
   // Row 2: question text headers
   let row2 = '<tr>';
   Q_LIDER.forEach(function(q, i) {
-    row2 += '<th class="lider-header q-header" title="' + q + '">';
+    row2 += '<th class="lider-header q-header" data-tooltip="' + q + '">';
     row2 += '<span class="q-num">L' + (i+1) + '</span>';
     row2 += '<span class="q-text">' + q + '</span>';
     row2 += '</th>';
   });
   Q_TIME.forEach(function(q, i) {
-    row2 += '<th class="time-header q-header" title="' + q + '">';
+    row2 += '<th class="time-header q-header" data-tooltip="' + q + '">';
     row2 += '<span class="q-num">T' + (i+1) + '</span>';
     row2 += '<span class="q-text">' + q + '</span>';
     row2 += '</th>';
   });
   Q_ESTRUTURA.forEach(function(q, i) {
-    row2 += '<th class="estrutura-header q-header" title="' + q + '">';
+    row2 += '<th class="estrutura-header q-header" data-tooltip="' + q + '">';
     row2 += '<span class="q-num">E' + (i+1) + '</span>';
     row2 += '<span class="q-text">' + q + '</span>';
     row2 += '</th>';
@@ -278,7 +317,21 @@ function buildScorecardRow(m) {
   return html;
 }
 
-async function loadData() {
+async function filterScorecard(term) {
+  var rows = document.querySelectorAll('#scorecardBody tr');
+  var count = 0;
+  rows.forEach(function(row) {
+    var name = row.cells[0] ? row.cells[0].textContent.trim().toLowerCase() : '';
+    if (name.includes('média') || name.includes('media')) { row.style.display=''; return; }
+    var show = !term || name.includes(term.toLowerCase());
+    row.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  var el = document.getElementById('scorecardCount');
+  if (el) el.textContent = term ? count + ' resultado(s)' : '';
+}
+
+function loadData() {
   try {
     var res = await fetch(WEBHOOK);
     var data = await res.json();
