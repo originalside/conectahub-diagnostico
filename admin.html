@@ -285,7 +285,7 @@ function buildScorecardRow(m) {
 
 function filterScorecard(t){var rows=document.querySelectorAll('#scorecardBody tr');var c=0;rows.forEach(function(r){var n=r.cells[0]?r.cells[0].textContent.trim().toLowerCase():'';if(n.includes('média')){r.style.display='';return;}var s=!t||n.includes(t.toLowerCase());r.style.display=s?''  :'none';if(s)c++;});var el=document.getElementById('scorecardCount');if(el)el.textContent=t?c+' resultado(s)':'';}
 
-function loadData() {
+async function loadData() {
   try {
     var res = await fetch(WEBHOOK);
     var data = await res.json();
